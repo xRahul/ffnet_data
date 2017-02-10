@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import locale
 import json
+import csv
 
 def merge_two_dicts(x, y):
     """Given two dicts, merge them into a new dict as a shallow copy."""
@@ -11,10 +12,12 @@ def merge_two_dicts(x, y):
 
 locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' )
 
-page = requests.get("https://www.fanfiction.net/u/2269863/Less-Wrong")
+print("\n\nGetting User Page\n\n")
+page = requests.get("https://www.fanfiction.net/u/2583361/")
+print("\n\nGetting User Page - Completed\n\n")
+# page.content = page.content.encode('utf-8')
 soup = BeautifulSoup(page.content, 'html.parser')
 fav_stories_div = soup.find_all('div', class_='z-list favstories')
-
 stories_metadata = []
 
 for n, story in enumerate(fav_stories_div):
@@ -87,5 +90,5 @@ for n, story in enumerate(fav_stories_div):
 		print len(desc_metadata_list), story_metadata, desc_metadata_list
 	stories_metadata.append(story_metadata)
 
-with open('data.json', 'w') as outfile:
-    json.dump(stories_metadata, outfile)
+with open('fav_stories_metadata.json', 'w') as outfile_json:
+    json.dump(stories_metadata, outfile_json)
